@@ -1,0 +1,211 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <div class="row pt-5">
+
+
+        <div class="card mb-3">
+            <div class="card-body">
+                {% if regionNumb == 0 %}
+                    <a href='{% url "load_regions" %}'><button class="btn btn-warning">load data</button></a>
+                    {% else %}
+                    <a href='{% url "delete_regions" %}'><button class="btn btn-danger">delete data</button></a>
+                    <div class="form-text">Cette action va remettre à zero la base de données contenant les régions</div>
+                {% endif %}
+            </div>
+        </div>
+
+       
+
+        <!-- display api call get regions -->
+        <div class="col-md-4">
+
+            <h1>Liste des régions</h1>
+            
+            <!-- {{ regions }}
+            <br><br>
+            {{ departements }} -->
+            
+            {% if regionNumb > 0 %}        
+            
+            {% if regions == "Error" %}
+            
+            <h3>Error</h3>         
+            
+            {% else %}
+            
+                <h6>il y a  {{ regionNumb }} régions</h6>
+                <p class="form-text">La liste des régions est récupéré via l'api https://geo.api.gouv.fr/decoupage-administratif/regions puis enregistrée en base de données. Les données affichées sont chargées depuis la base de données</p>
+
+                    <table class="table mt-3">
+                        <thead>
+                            <tr>
+                                <th scope="col">nom</th>
+                                <th scope="col">code</th>
+                                <!-- <th scope="col">visited</th> -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for region in regions %}
+                            <tr>
+                                <td>{{ region.regionName }}</td>
+                                <td>{{ region.regionCode }}</td>
+                                <!-- <td>
+                                    {% if region.regionVisited %}
+                                        <input type="checkbox"id="coucou"  name="check" checked>
+                                    {% else %}
+                                        <input type="checkbox" id="coucou" name="check">
+                                    {% endif %}
+                                </td> -->
+                                <!-- <td>
+                                    <form  action="{% url 'home' %}" method="POST">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="{{ region.regionVisited }}" id="flexCheckDefault" name="visitedRegion">
+                                        </div>
+                                    </form> -->
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                
+                {% endif %}        
+            
+            {% else %}
+            
+                <h3>No Data in database</h3>
+                <div class="form-text">please load before going any further</div>
+                    
+            {% endif %}
+
+        </div>
+        <div class="col-md-1"></div>
+        <div class="col-md-7">
+
+            {% if regionNumb > 0 %}
+            
+                <h1>Search</h1>
+
+                <form class=" mt-4 mb-4" action="{% url 'home' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">Choississez une région dans la liste</label>
+                        <!-- <input type="number" class="form-control" id="coderegion" aria-describedby=""> -->
+                        <select class="form-select" aria-label="Default select example" name="coderegion">
+                            <option selected>...</option>
+                            <option value="11">Île-de-France</option>
+                            <option value="24">Centre-Val de Loire</option>
+                            <option value="27">Bourgogne-Franche-Comté</option>
+                            <option value="28">Normandie</option>
+                            <option value="32">Hauts-de-France</option>
+                            <option value="44">Grand Est</option>
+                            <option value="52">Pays de la Loire</option>
+                            <option value="53">Bretagne</option>
+                            <option value="75">Nouvelle-Aquitaine</option>
+                            <option value="76">Occitanie</option>
+                            <option value="84">Auvergne-Rhône-Alpes</option>
+                            <option value="93">Provence-Alpes-Côte d'Azur</option>
+                            <option value="94">Corse</option>
+                            <option value="01">Guadeloupe</option>
+                            <option value="02">Martinique</option>
+                            <option value="03">Guyane</option>
+                            <option value="04">La Réunion</option>
+                            <option value="06">Mayotte</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+
+                {% if departements == "Error" %}
+
+                    <div>Effectuer une recherche</div>
+
+                    {% else %}
+
+                    <p>il y a {{ departmentNumb }} départements dans cette région</p>
+
+                    <table class="table mt-3">
+                        <thead>
+                            <tr>
+                                <th scope="col">nom</th>
+                                <th scope="col">code</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for departement in departements %}
+                            <tr>
+                                <td>{{ departement.nom }}</td>
+                                <td>{{ departement.code }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <div class="form-text">La liste des départements de la région choisie est appelée depuis l'api</div>
+
+                    <br>
+                    <br>
+
+                    {{ regionInfo }}
+
+                    <div>
+                        <canvas id="myChart"></canvas>
+                        
+                    </div>
+                    
+                    <br>
+
+                {% endif %}
+
+            {% endif %}
+
+            
+
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script>
+        const ctx = document.getElementById('myChart');
+        var a = "{{ df|escapejs }}"
+        var b = "{{ df1 }}";
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                // labels: a,
+                datasets: [{
+                    label: 'coucou',
+                    data: [{x: 'nico', y: 3}, { x: 'lol', y: 4 }],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+
+        const cfg = {
+                type: 'bar',
+                data: {
+                    datasets: [{
+                        data: [20, 10],
+                    }],
+                    labels: ['a', 'b']
+                }
+            }
+        
+    </script>
+
+{% endblock %}
+
+
+
+
+
