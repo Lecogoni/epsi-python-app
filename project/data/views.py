@@ -99,10 +99,10 @@ def addVisitedRegion(request):
     return render(request, 'home.html', {'regions': regions, 'regionNumb': regionNumb })
 
 
-def retrieveRegion(request):
-    regions = Region.objects.all()
-    regionNumb = len(regions)
-    return render(request, 'home.html', {'regions': regions, 'regionNumb': regionNumb })
+# def retrieveRegion(request):
+#     regions = Region.objects.all()
+#     regionNumb = len(regions)
+#     return render(request, 'home.html', {'regions': regions, 'regionNumb': regionNumb })
 
 
 
@@ -144,3 +144,4 @@ def delete_regions(request):
     regionData = Region.objects.all().values()
     regionNumb = 0
     return render(request, 'home.html', {'regions': regionData, 'regionNumb': regionNumb })
+

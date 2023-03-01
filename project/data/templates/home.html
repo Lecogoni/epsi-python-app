@@ -28,11 +28,11 @@
             
             {% if regionNumb > 0 %}        
             
-            {% if regions == "Error" %}
-            
-            <h3>Error</h3>         
-            
-            {% else %}
+                {% if regions == "Error" %}
+                
+                <h3>Error</h3>         
+                
+                {% else %}
             
                 <h6>il y a  {{ regionNumb }} régions</h6>
                 <p class="form-text">La liste des régions est récupéré via l'api https://geo.api.gouv.fr/decoupage-administratif/regions puis enregistrée en base de données. Les données affichées sont chargées depuis la base de données</p>
