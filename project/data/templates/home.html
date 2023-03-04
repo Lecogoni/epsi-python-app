@@ -90,27 +90,13 @@
                     {% csrf_token %}
                     <div class="mb-3">
                         <label for="exampleInputEmail1" class="form-label">Choississez une région dans la liste</label>
+                        <div class="form-text">La liste est créée dynamiquement à partir des info proveannt de la base de données</div>
+
                         <!-- <input type="number" class="form-control" id="coderegion" aria-describedby=""> -->
                         <select class="form-select" aria-label="Default select example" name="coderegion">
-                            <option selected>...</option>
-                            <option value="11">Île-de-France</option>
-                            <option value="24">Centre-Val de Loire</option>
-                            <option value="27">Bourgogne-Franche-Comté</option>
-                            <option value="28">Normandie</option>
-                            <option value="32">Hauts-de-France</option>
-                            <option value="44">Grand Est</option>
-                            <option value="52">Pays de la Loire</option>
-                            <option value="53">Bretagne</option>
-                            <option value="75">Nouvelle-Aquitaine</option>
-                            <option value="76">Occitanie</option>
-                            <option value="84">Auvergne-Rhône-Alpes</option>
-                            <option value="93">Provence-Alpes-Côte d'Azur</option>
-                            <option value="94">Corse</option>
-                            <option value="01">Guadeloupe</option>
-                            <option value="02">Martinique</option>
-                            <option value="03">Guyane</option>
-                            <option value="04">La Réunion</option>
-                            <option value="06">Mayotte</option>
+                            {% for region in regions %}
+                                <option value={{region.regionCode}}>{{ region.regionName }}</option>
+                            {% endfor %}
                         </select>
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
@@ -140,16 +126,12 @@
                             {% endfor %}
                         </tbody>
                     </table>
-                    <div class="form-text">La liste des départements de la région choisie est appelée depuis l'api</div>
-
                     <br>
+                    <div class="form-text">La liste des départements de la région choisie est appelée depuis l'api. Le graphic affiche des données dynamique en provenance de l'api et compiler en backend</div>
                     <br>
-
-                    {{ regionInfo }}
 
                     <div>
                         <canvas id="myChart"></canvas>
-                        
                     </div>
                     
                     <br>
@@ -157,8 +139,6 @@
                 {% endif %}
 
             {% endif %}
-
-            
 
         </div>
 
@@ -168,16 +148,24 @@
     
     <script>
         const ctx = document.getElementById('myChart');
-        var a = "{{ df|escapejs }}"
-        var b = "{{ df1 }}";
+        var regioninfo = JSON.parse("{{regionInfo | escapejs}}");
+
+        var jsonArr = [];
+
+            for (var i = 0; i < regioninfo.length; i++) {
+                jsonArr.push({
+                    x: regioninfo[i].x,
+                    y: regioninfo[i].y
+                });
+            }
 
         new Chart(ctx, {
             type: 'bar',
             data: {
                 // labels: a,
                 datasets: [{
-                    label: 'coucou',
-                    data: [{x: 'nico', y: 3}, { x: 'lol', y: 4 }],
+                    label: 'Habitants par région',
+                    data: jsonArr,
                     borderWidth: 1
                 }]
             },
@@ -195,7 +183,7 @@
                 type: 'bar',
                 data: {
                     datasets: [{
-                        data: [20, 10],
+                        data: [20, 20],
                     }],
                     labels: ['a', 'b']
                 }
