@@ -3,18 +3,11 @@ from django.shortcuts import render
 from django.template import RequestContext
 from django.utils import timezone
 from datetime import datetime
-from datetime import timezone
 from .models import Region
 from .models import Weather
-from django.utils.dateparse import parse_datetime
-from django.utils.dateparse import parse_date
+from . import Weather
 
-def welcome(request):
-    import requests
-    mydata = {
-        'hello': 'Mr Artz', 
-     }
-    return render(request, 'welcome.html', context=mydata)
+
 
 # Create your views here.
 
@@ -102,7 +95,6 @@ def meteo(request):
     weather = ''
     loaded = None
     cityWeather = []
-    cityWeatherData = ['', '', '']
 
     if request.method == 'POST':
         postcode = request.POST['postcode']
@@ -123,7 +115,7 @@ def meteo(request):
 
         else:
             if len(city) > 1:
-                city = city
+                city = 'multi-city'
             if len(city) == 1:
                 codeCommune = city[0]['codeCommune']
                 nomCommune = city[0]['nomCommune']
@@ -132,7 +124,10 @@ def meteo(request):
             
                 try:
                     weather = json.loads(weather_request.content)
-                    cityWeatherData = load_weather(codeCommune, weather)
+                    print('********************$')
+                    print(codeCommune)
+                    print(weather)
+                    cityWeather = load_weather(codeCommune, weather)
                     loaded = True
                 except Exception as e:
                     loaded = False
@@ -144,21 +139,15 @@ def meteo(request):
         'nomCommune': nomCommune, 
         'weather': weather,
         'loaded': loaded,
-        'cityWeather': json.dumps(cityWeatherData),
-        'cityWeatherDate': json.dumps(cityWeatherData[0]),
-        'cityWeatherTmin': json.dumps(cityWeatherData[1]),
-        'cityWeatherTmax': json.dumps(cityWeatherData[2])
+        'cityWeather': cityWeather
      }
-
     return render(request, 'meteo.html', context=mydata)
 
 
 def load_weather(codeCommune, weather):
 
-    cityWeatherData = []
-    cityWeatherDate = []
-    cityWeatherTmin = []
-    cityWeatherTmax = []
+    # newWeatherData = Weather(name = 'nimes', codeInsee = '12223')
+    # newWeatherData.save()
 
     # data from db
     wheatherData = Weather.objects.filter(codeInsee = codeCommune).values()
@@ -166,48 +155,31 @@ def load_weather(codeCommune, weather):
     # data from API
     forecastDate = weather['forecast']['datetime'][0:10]
 
+    print('---------------------------------')
+    print(forecastDate)
+    print(weather)
+
     dateInDb = False
 
     if len(wheatherData) > 0:
        
         for data in wheatherData:
+            print('_______')
+            print(data['date'])
             if str(data['date']) == str(forecastDate):
                 dateInDb = True
+
 
     # wheather already in db for that city at that date    
     if dateInDb:
         print('data already in db')
-
     # wheather not in db    
     else:
 
-        # convert date format
-        tmp_date = weather['forecast']['datetime'][0:10]
-        my_date = datetime.strptime(tmp_date, '%Y-%m-%d')
-
-        newWeatherData = Weather()
-        newWeatherData.name = weather['city']['name']
-        newWeatherData.codeInsee = weather['city']['insee']
-        newWeatherData.date = my_date.date()
-        newWeatherData.tmin = weather['forecast']['tmin']
-        newWeatherData.tmax = weather['forecast']['tmax']
-        newWeatherData.probarain = weather['forecast']['probarain']
-        newWeatherData.save()
-
-    cityWeather = Weather.objects.filter(codeInsee = codeCommune).order_by('date').values()
+        print( weather['city']['name'])
+        print( weather['forecast']['tmin'])
     
-    for data in cityWeather:
-
-        cityWeatherDate.append(str(data['date']))
-        cityWeatherTmin.append(data['tmin'])
-        cityWeatherTmax.append(data['tmax'])
-
-    cityWeatherData.append(cityWeatherDate)
-    cityWeatherData.append(cityWeatherTmin)
-    cityWeatherData.append(cityWeatherTmax)
-
-    return cityWeatherData
-
+       
 
 def load_regions(request):
 

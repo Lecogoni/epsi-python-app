@@ -50,19 +50,6 @@
                             <tr>
                                 <td>{{ region.regionName }}</td>
                                 <td>{{ region.regionCode }}</td>
-                                <!-- <td>
-                                    {% if region.regionVisited %}
-                                        <input type="checkbox"id="coucou"  name="check" checked>
-                                    {% else %}
-                                        <input type="checkbox" id="coucou" name="check">
-                                    {% endif %}
-                                </td> -->
-                                <!-- <td>
-                                    <form  action="{% url 'home' %}" method="POST">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="{{ region.regionVisited }}" id="flexCheckDefault" name="visitedRegion">
-                                        </div>
-                                    </form> -->
                                 </td>
                             </tr>
                             {% endfor %}

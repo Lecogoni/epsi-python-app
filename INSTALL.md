@@ -49,9 +49,9 @@ urllib3==1.26.14
 ## code d'accès au BO
 
 ```
-Username : admin
+Username : admin ET root
 Email address: admin@yopmail.com
-Password : Epsipython1
+Password : Epsipython1 (même password pour les deux)
 ```
 
 

@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <div class="container p-4">
+
+        <h1>Bonjour {{ hello }}</h1>
+
+        <p>Bienvenue sur l'app du groupe
+            <ul>
+                <li>Samir BESOLTANE</li>
+                <li>Jeremy BRUZAC</li>
+                <li>Thierry FERCHICHI</li>
+                <li>Nicolas GIRAUD</li>
+            </ul>
+        </p>
+
+        <p>Nous avons utilisé ce projet afin d'approfondir nos connaissances de Python et découvrir le framework Django.<br>Pour ce faire nous avons créé une app avec
+            pour objectif de :
+            <li>pouvoir se connecter à des API et receuillir des données</li>
+            <li>persister, manipuler des données</li>
+            <li>afficher ces données sous forme de graph en utilisant des librairies externe : <a href="https://www.chartjs.org">GraphJs</a> et <a href="https://matplotlib.org">MatPlot</a></li>
+        </p>
+
+        <p>Il vous ai possible d'accéder à ces différentes "manipulations" via la navbar</p>
+
+        <ol>
+            <li>
+                <h5>la page régions</h5>
+                <p>propose de chargé en DB la liste des régions Française recuilli depuis une API
+                    public.
+                    Une fois chargé il vous sera possible de sélectionner dans une menu déroulant une région (liste chargé dynamiquement
+                    depuis la DB) afin d'afficher
+                    l'ensemble des départements de la région.<br>
+                    un graph présente la population de chacun des départements.
+                </p>
+            </li>
+            <li>
+                <h5>la page météo</h5>
+                <p>propose d'afficher la météo dont vous aurez entrer le code postal.<br>
+                    ce module fonctionne ainsi : 
+                    <ul>
+                        <li>l'app se connecte a une api et récupère le code insee correspondant au code postal</li>
+                        <li>si pluseirus villes ont le même code postal, la page affichera une liste des villes. ex : le code postal 91150. A ce stage nous n'avons pas developper au delà</li>
+                        <li>si le code postal n'existe pas un message sera afficher</li>
+                        <li>sinon grâce au code insee, l'app se connecte à une seconde api pour récupérer la météo à J1</li>
+                        <li>a ce stade l'app examine la base de données pour voir si cette data - météo à J+1 pour la ville choisi - est déjà persisté en base de données</li>
+                        <li>si elle ne l'est pas l'app l'enregistre en base de données</li>
+                        <li>enfin l'app remonte l'ensemble des données météo stockées en base de données pour la ville choisie</li>
+                    </ul>
+                    
+                </p>
+                <p>Pour tester cela il est vous est possible d'entrer via le BO des données concernant la ville de montpellier. son code insee est le 34172</p>
+                <p>Normalement des données seront déjà persister pour les codes postaux 34000 et 30000</p>
+            </li>
+        </ol>
+
+
+
+    </div>
+
+
+{% endblock %}  
+
+
+
+
