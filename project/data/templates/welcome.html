@@ -52,6 +52,31 @@
                 <p>Pour tester cela il est vous est possible d'entrer via le BO des données concernant la ville de montpellier. son code insee est le 34172</p>
                 <p>Normalement des données seront déjà persister pour les codes postaux 34000 et 30000</p>
             </li>
+            <li>
+                <h5>la page currency</h5>
+                <p>propose d'afficher un graphique des taux de change entre deux valeur monnaitaire sur les dernières 24h.<br>
+                    Il permet aussi d'avoir la dernière valeur du taux de change entre différentes monnaies et crytomonnaie disponibles <br>
+                    ce module fonctionne ainsi :
+                    <h4>ATTENTION - CETTE PARTIE PREND DU TEMPS A CHARGER SURTOUT LA PREMIERE FOIS !</h4> 
+                    <ul>
+                        <li>l'app se connecte a une api et récupère la liste des monnaies et leurs informations (taux de change, symbole, hsitorique ...)</li>
+                        <li>une fois les informations rapatriés elles sont et chargé dans un fichier local (json)<br>
+                             et chargé dans la base de donnée SQLi (après raffinement entre les différentes données importés) </li>
+                        <li>par défaut, l'API nous autorisez à récupérer les données pour le dollar américain</li>
+                        <li>les autres données sont moins cohérente car elle sont simulé pour l'expérience</li>
+                        <li>Avec les données récupérés, nous les mettons en forme graphiquement grâce à la librairie MatPlotlib</li>
+                        <li>Ce graphique retourne les taux de change simulés entre deux monnaies sur 24H</li>
+                        <li>Cette partie exploite un peu plus la POO, avec class et méthodes</li>
+                    </ul>
+                    
+                </p>
+                <p>Pour le test avec des données vraissemblable tant que vous garder USD en valeur A vous pouvez avoir un résultat dans toutes les autres monnaies cohérent</p>
+                <h5>Support</h5>
+                <p>Il est possible qu'une erreur lié à la connexion de la base de donnée ce produise, l'API semble avoir des sécurités anti scrapping ce qui fait qu'il n'est plus possible de<br>
+                    récupérer la donnée sur celle-ci. Pour cela renommer le fichier "old_latest_currency_rate_2023-03-04.json", qui se trouve dans le répertoire /project/bitcoin/src/data/, en "latest_currency_rate_AAAA-MM-JJ.json"<br>
+                     avec AAAA-MM-JJ représentant la date du jour ou vous faites le test. Faire la même chose pour le fichier "old_supported_currency_2023-03-04".
+                </p>
+            </li>
         </ol>
 
 
