@@ -308,7 +308,7 @@ def display_chart(request):
     # On récupère tous les monnaies pour faire notre liste déroulante (à affiner)
     currencies = Currency.objects.all()
             
-    print(value_convert_from_to,image_chart, currency_from_requested, currency_to_requested)
+
     
     mydata = {
         "imagechart": image_chart,
