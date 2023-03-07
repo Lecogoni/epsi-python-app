@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'data', #import my app data
     'chartjs',
+    'bitcoin'
 ]
 
 MIDDLEWARE = [

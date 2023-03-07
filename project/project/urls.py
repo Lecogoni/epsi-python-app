@@ -19,4 +19,5 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('data.urls')), # include path from data app
+    path('bitcoin/', include('bitcoin.urls'))
 ]

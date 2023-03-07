@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Taux de change des monnaies</h1>
+<p>Sélectionnez vos monnaies :</p>
+<form method="POST" action="./bitcoin">
+	{% csrf_token %}
+	<select name="currency_from">
+		{% for currency in currencies %}
+			<option value="{{ currency.currencyCode }}" {% if currency.currencyCode == currency_from %}selected{% endif %}>{{ currency.currencyCode }} - {{ currency.currencyName }}</option>
+		{% endfor %}
+	</select>
+	<select name="currency_to">
+		{% for currency in currencies %}
+			<option value="{{ currency.currencyCode }}" {% if currency.currencyCode == currency_to %}selected{% endif %}>{{ currency.currencyCode }} - {{ currency.currencyName }}</option>
+		{% endfor %}
+	</select>
+	<input type="submit" value="Afficher">
+</form>
+
+{% if currency_from and currency_to %}
+	<div>
+		<h2>Taux de change : 1 {{ currency_from }} = {{ value_convert_from_to }} {{ currency_to }}</h2>
+	</div>
+{% endif %}
+
+	{% if imagechart %}
+	<div id="currency-chart">
+        <img src="data:image/png;base64,{{ imagechart }}" style="width:60%;" >
+    </div>
+	{% else %}
+	<p>Pas de graphique disponible entre {{currency_from}} et {{currency_to}}, réssayer avec d'autres valeurs</p>
+	{% endif %}
+
+
+{% endblock %}
