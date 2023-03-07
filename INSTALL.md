@@ -2,7 +2,7 @@
 
 ## Launch image et container
 
-
+le code du dockerfile ayant peremis la création de l'image : epsi-python:1.0, est en bas de cette doc. 
 ```
 docker build --build-arg ssh_prv_key="$(cat ~/.ssh/id_ed25519)" -t epsi-python:1.0 .
 
@@ -35,25 +35,26 @@ python manage.py migrate
 
 ```
 asgiref==3.6.0
-Django==4.1.7
+certifi==2022.12.7
+charset-normalizer==3.0.1
+Django==4.1.6
+idna==3.4
+Pillow==9.4.0
+requests==2.28.2
 sqlparse==0.4.3
+urllib3==1.26.14
 
 ```
 
+## code d'accès au BO
+
 ```
-Username : admin
+Username : admin ET root
 Email address: admin@yopmail.com
-Password : Epsipython1
+Password : Epsipython1 (même password pour les deux)
 ```
 
 
-TUTO 
-
-creation d'une app 
-quotes => data
-
-
-app (quotes) va accueillir nos data, a ses routes, son front
 
 API 
 https://iexcloud.io/console/
@@ -68,16 +69,29 @@ https://api.gouv.fr/les-api/base-adresse-nationale
 https://api.gouv.fr/les-api/api-geo
 
 
+Dockerfile :
+
+```
+FROM python:3.10
+
+# Add ssh private key into container
+ARG ssh_prv_key
+ARG ssh_pub_key
+
+# Authorize SSH Host
+RUN mkdir -p /root/.ssh && \
+    chmod 0700 /root/.ssh && \
+    ssh-keyscan github.com > /root/.ssh/known_hosts
+
+# Add the keys and set permissions
+RUN echo "$ssh_prv_key" > /root/.ssh/id_rsa && \
+    echo "$ssh_pub_key" > /root/.ssh/id_rsa.pub && \
+    chmod 600 /root/.ssh/id_rsa && \
+    chmod 600 /root/.ssh/id_rsa.pub
+
+# set Workdir
+RUN mkdir /usr/src/app
+WORKDIR /usr/src/app
+```
 
 
-
-git config --global user.name "Lecogoni"
-git config --global user.email "giraud.nicolas@me.com"
-
-git clone git@gitlab.com:epsi-learning/python-django-api-data-app.git
-git remote add origin git@gitlab.com:epsi-learning/python-django-api-data-app.git
-
-
-
-# API public key
-# pk_77e5f670937e4fe78c2e49097f8c49c6 

@@ -1,0 +1,181 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <div class="container p-4">
+
+        </div>
+
+        <h1>Météo</h1>
+
+        <div class="card pt-1 ps-3  pe-3 mb-3">
+            <form class=" mt-4 mb-4" action="{% url 'meteo' %}" method="POST">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Entrez un code postal</label>
+                    <input type="text" class="form-control" id="" aria-describedby="" name="postcode">
+                    <div id="" class="form-text">entrez le code postal d'une ville française</div>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+
+        {% if loaded %}
+            <div class="card p-3">
+                <h4>Vous avez choisi la commune de {{ nomCommune }} : </h4>
+                <h6>voici les données météorologiques pour la ville choisie :</h6>
+                <div>
+                    <canvas id="myChartForecast"></canvas>
+                </div>
+                <br>
+
+                <p class="form-text">affichage des données brut provenant de l'API météo</p>
+                <p class="form-text">{{weather}}</p>
+            </div>
+        {% else %}
+
+            {% if city == 'Error'  %}
+                <p>Il y a une erreur, veuillez entrer un code postal valide</p>
+            {% else %}
+                <p>Plusieurs villes ont le même code postal. </p>
+                <table class="table mt-3">
+                    <thead>
+                        <tr>
+                            <th scope="col">nom</th>
+                            <th scope="col">code postal</th>
+                            <th scope="col">code commune</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in city %}
+                        <tr>
+                            <td>{{ i.nomCommune }}</td>
+                            <td>{{ i.codePostal }}</td>
+                            <td>{{ i.codeCommune }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+
+        {% endif %}
+
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script>
+
+        var cityWeatherDate = JSON.parse("{{cityWeatherDate | escapejs}}");
+        var cityWeatherTmin = JSON.parse("{{cityWeatherTmin | escapejs}}");
+        var cityWeatherTmax = JSON.parse("{{cityWeatherTmax | escapejs}}");
+
+        var date = [];
+        var tmin = [];
+        var tmax = [];
+
+            for (var i = 0; i < cityWeatherDate.length; i++) {
+                date.push(cityWeatherDate[i]);
+                tmin.push(cityWeatherTmin[i]);
+                tmax.push(cityWeatherTmax[i]);
+            }
+
+        var data = {
+            "datasets": [
+                {
+                    "backgroundColor": "rgb(156, 39, 176)",
+                    "borderColor": "rgb(156, 39, 176)",
+                    "fill": false,
+                    "data": tmin,
+                    "id": "tmin",
+                    "label": "température basse",
+                    "yAxisID": "left"
+                },
+                {
+                    "backgroundColor": "rgb(39, 176, 200)",
+                    "borderColor": "rgb(39, 176, 200)",
+                    "fill": false,
+                    "data": tmax,
+                    "id": "tmax",
+                    "label": "température haute",
+                    "yAxisID": "right"
+                }
+            ],
+            "labels": date
+        };
+            
+        var options = {
+                "elements": {
+                    "rectangle": {
+                        "borderWidth": 2
+                    }
+                },
+                "layout": {
+                    "padding": 0
+                },
+                "legend": {
+                    "display": true,
+                    "labels": {
+                        "boxWidth": 16
+                    }
+                },
+                "maintainAspectRatio": false,
+                "responsive": true,
+                "scales": {
+                    "xAxes": [
+                        {
+                            "gridLines": {
+                                "display": false
+                            },
+                            "scaleLabel": {
+                                "display": true,
+                                "labelString": "Date"
+                            },
+                            "stacked": false,
+                            "ticks": {
+                                "autoSkip": true,
+                                "beginAtZero": true
+                            },
+                            "time": {
+                                "tooltipFormat": "[Q]Q - YYYY",
+                                "unit": "quarter"
+                            },
+                            "type": "time"
+                        }
+                    ],
+                    "yAxes": [
+                        {
+                            "scaleLabel": {
+                                "display": false,
+                                "labelString": "Purchase amount (USD)"
+                            },
+                            "id": "left",
+                            "stacked": false,
+                            "ticks": {
+                                "beginAtZero": true
+                            }
+                        },
+                    ]
+                },
+                "title": {
+                    "display": true
+                },
+                "tooltips": {
+                    "intersect": false,
+                    "mode": "index",
+                    "position": "nearest",
+                    "callbacks": {}
+                }
+            }
+
+        var type = "line";
+
+        var myChart = new Chart(document.getElementById("myChartForecast").getContext('2d'), { options, data, type });
+
+
+    </script>
+
+{% endblock %}
+
+
+
