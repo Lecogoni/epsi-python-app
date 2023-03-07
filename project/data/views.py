@@ -16,6 +16,15 @@ def welcome(request):
      }
     return render(request, 'welcome.html', context=mydata)
 
+
+def currency(request):
+    import requests
+    mydata = {
+        'msg': '', 
+     }
+    return render(request, 'bitcoin/bitcoin.html', context=mydata)
+
+
 # Create your views here.
 
 # home function render home.htm view in template

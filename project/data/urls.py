@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
 
+
 urlpatterns = [
     path('', views.welcome, name="welcome"), # path call method from views file
     path('home.html', views.home, name="home"), # path call method from views file

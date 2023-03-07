@@ -204,7 +204,6 @@ class CurrencyChart:
                 while i < len(date_currency):
                     i = i + 1
                     value_currency.append(random.uniform(float(value), float(value)+2))
-                    print(value_currency)
 
         # Créer le graphique
         ax = fig.add_axes([0.1,0.1,0.8,0.8])
