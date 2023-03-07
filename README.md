@@ -13,23 +13,6 @@ Nicolas GIRAUD
 Notre projet constiste en une petite application en python developpé avec le framework Django. 
 Le but de ce projet est de nous initier à la manipulation de data, la connexion a une API et le stockage de données en base de données.
 
-<<<<<<< HEAD
-## code d'accès au BO
-
-cd project
-python manage.py runserver
-
-
-http://127.0.0.1:8000
-
-## code d'accès au BO
-
-```
-Username : admin ET root
-Email address: admin@yopmail.com
-Password : Epsipython1 (même password pour les deux)
-```
-=======
 ## Installation du projet
 
 > Afin d'installer le projet de notre groupe vous avez besoin de suivre les instructions suivantes:
@@ -107,4 +90,3 @@ Password : Epsipython1 (même password pour les deux)
 ```
 
 Trois tables sont disponibles "Curencys" qui contient les monnaies de l'API monnaitare, "Regions" qui contient la liste des régions et département qui l'a compose et enfin une table "Weather" qui contient la météo.
->>>>>>> @{-1}
